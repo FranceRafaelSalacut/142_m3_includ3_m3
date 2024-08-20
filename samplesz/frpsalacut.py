@@ -7,7 +7,7 @@ https://stackoverflow.com/questions/40647881/skipping-blank-lines-in-read-file-p
 
 from icecream import ic
 
-def readFile(fileName: str):
+def readFile(fileName: str, fileNames: "list" = []) :
     with open(fileName, "r") as file:
         for line in file:
             if not line.strip():
@@ -15,7 +15,11 @@ def readFile(fileName: str):
             line = line.replace("\n", "")
             if("#include" in line):
                 #print(line)
-                readFile(line.split(" ")[1].replace('"', ''))
+                newFileName = line.split(" ")[1].replace('"', '')
+                if newFileName in fileNames:
+                    continue
+                fileNames.append(newFileName)
+                readFile(newFileName, fileNames)
             else:
                 print(line)
 
@@ -25,6 +29,6 @@ def main():
 
     inputs = ("inputFile1.in", "inputFile2.in", "inputFile3.in")
 
-    readFile(inputs[0])
+    readFile(inputs[2])
 
 main()
